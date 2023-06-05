@@ -3,6 +3,7 @@ import UserModel from '../../models/UserModel.js';
 import bcrypt from 'bcryptjs/dist/bcrypt.js';
 import Joi from '@hapi/joi';
 import Jwt from 'jsonwebtoken';
+import { checkLogin } from '../middleware/checkAuthLogin.js';
 
 const router = express.Router();
 
@@ -16,6 +17,18 @@ const registerSchema = Joi.object({
 const loginSchema = Joi.object({
   email: Joi.string().min(6).required().email(),
   password: Joi.string().min(6).required(),
+});
+
+router.get('/', checkLogin, async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ _id: req.userID })
+      .populate('completedChallenges')
+      .exec();
+    res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
 });
 
 router.post('/register', async (req, res) => {

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
@@ -15,11 +16,23 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    points: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     password: {
       type: String,
       required: true,
       min: 8,
     },
+    completedChallenges: [
+      {
+        type: Schema.Types.ObjectId,
+        required: false,
+        ref: 'Challenge',
+      },
+    ],
   },
   {
     timestamps: true,
