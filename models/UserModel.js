@@ -33,6 +33,13 @@ const userSchema = new mongoose.Schema(
         ref: 'Challenge',
       },
     ],
+    userPosts: [
+      {
+        type: Schema.Types.ObjectId,
+        required: false,
+        ref: 'Post',
+      },
+    ],
   },
   {
     timestamps: true,

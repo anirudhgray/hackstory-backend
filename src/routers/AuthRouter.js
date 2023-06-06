@@ -22,9 +22,21 @@ const loginSchema = Joi.object({
 router.get('/', checkLogin, async (req, res) => {
   try {
     const user = await UserModel.findOne({ _id: req.userID })
-      .populate('completedChallenges')
+      .populate(['completedChallenges', 'userPosts'])
       .exec();
     res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+router.get('/all', async (req, res) => {
+  try {
+    const users = await UserModel.find({})
+      .populate(['completedChallenges', 'userPosts'])
+      .exec();
+    res.status(200).send(users);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
